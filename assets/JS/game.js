@@ -6,12 +6,13 @@
     }
     var playerAttack = 10;
     var playerYen = 2000;
+
 // enemy robot
-var enemyName = "CybaFyta";
+var enemyNames = ["Roborto", "Robot Rich Evans", "CybaFyta"];
 var enemyHealth = 50;
 var enemyAttack = 12;
 
-var fight = function() {
+var fight = function(enemyName) {
     // fight of skip
     var promptFight = window.prompt("Would you like to FIGHT or SKIP this round? FIGHT/SKIP:")
     window.alert("You have chosen to " + promptFight + "!")
@@ -32,7 +33,7 @@ var fight = function() {
             
             // check enemyHealth
             if (enemyHealth <= 0){
-                window.alert(enemyName + " is fucking dead!💀 ")
+                window.alert(enemyName + " is fucking dead!💀")
             }
             else {
                 window.alert(enemyName + " still has " + enemyHealth + " health left")
@@ -46,10 +47,10 @@ var fight = function() {
             
             // check playerHealth
             if (playerHealth <= 0){
-                window.alert("Contestant " + playerName + " has fucking died! I mean he's dead as fuck, holy shit!")
+                window.alert("Challenger " + playerName + " has fucking died! I mean he's dead as fuck, holy shit!")
             }
             else {
-                window.alert("Contestant " + playerName + " has " + playerHealth + " health left")
+                window.alert("Challenger " + playerName + " has " + playerHealth + " health left")
             }
     // player chooses to SKIP
     } else if (promptFight === 'skip' || promptFight === 'SKIP' || promptFight === 'Skip') {
@@ -69,4 +70,6 @@ var fight = function() {
     }
 }
 
-fight();
+for (var i = 0; i < enemyNames.length; i++) {
+    fight(enemyNames[i]);
+}
