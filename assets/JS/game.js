@@ -68,9 +68,15 @@
       }; // end of fight function    
 
 for (var i = 0; i < enemyNames.length; i++) {
-    // debugger;
-    // call fight function with enemy robots
-    var pickedEnemyName = enemyNames[i];
-    enemyHealth = 50;
-    fight(enemyNames[i]);
+    if (playerHealth > 0){
+        window.alert('Welcome to roboGladiators! Round ' + (i + 1));
+        var pickedEnemyName = enemyNames[i];
+        enemyHealth = 50;
+        // call fight function with enemy robots
+        fight(enemyNames[i]);
+    }
+    else if (playerHealth <= 0); {
+        window.alert('You have lost your robot in battle: GAME OVER!')
+        break;
+    }
 }
