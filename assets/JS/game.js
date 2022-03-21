@@ -78,7 +78,7 @@
 
 // *funtion to start  game
 var startGame = function() {
-  // debugger;
+  debugger;
   // reset player health
   playerHealth = 100
   playerAttack = 10
@@ -93,6 +93,15 @@ var startGame = function() {
           enemyHealth = 50;
           // call fight function with enemy robots
           fight(enemyNames[i]);
+          // if defeated enymy is not last, then open shop
+          if (playerHealth > 0 && i < enemyNames.length - 1) {
+            // ask player if they'd like to shop
+            var storeConfirm = window.confirm('Would you like to paruse the shop before the next round?')
+            // if yes, then call shop function
+            if (storeConfirm){
+              shop();
+            }
+          };
       }
       else if(playerHealth <= 0) {
           window.alert('You have lost your robot in battle: GAME OVER!');
@@ -113,7 +122,7 @@ var endGame = function() {
     window.alert("Your challenger has been destroyed: GAME OVER!")
   }
   // play again confirm
-  var playAgain = window.confirm("Would you like to play")
+  var playAgain = window.confirm("Would you like to play again?")
   switch (playAgain) {
     case true:
       startGame()
@@ -125,6 +134,72 @@ var endGame = function() {
   }
 };
 // *end end game function
+
+// * start shop function
+var shop = function() {
+  var shopOptionPrompt = window.prompt('Would you like to: REFILL your health (500¥); UPGRADE your attack (1200¥); LEAVE the shop. You have ' + playerYen + '¥')
+  switch (shopOptionPrompt) {
+
+    // increasing player Health
+    case 'Refill':
+    case 'refill':
+    case 'REFILL':
+      if (playerYen >= 500) {
+      var refillConfirm = window.confirm("Do you want to refill your challenger's health by 20hp for 500¥?")
+      switch (refillConfirm) {
+        case true:
+          playerHealth = playerHealth + 20
+          playerYen = playerYen - 500
+          window.alert("Challenger health is now at " + playerHealth + "hp! You have " + playerYen + "¥ left.")
+          break;
+      
+        default:
+          shop()
+          break;
+      }
+      }
+      // if player doesn't have enough yen
+      else {
+        window.alert("Sorry, you don't have enough cash for that.")
+      }
+      break;
+      
+      // increasing player attack
+      case 'Upgrade':
+      case 'upgrade':
+      case 'UPGRADE':
+        if (playerYen >= 1200) {
+          var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
+          switch (upgradeConfirm) {
+            case true:
+              playerAttack = playerAttack + 6
+              playerYen = playerYen - 1200
+              window.alert("Challenger attack now does " + playerAttack + "dmg! You have " + playerYen + "¥ left.")
+              break;
+          
+            default:
+              break;
+          }
+        }
+        // if player doesn't have enough yen
+        else {
+          window.alert("Sorry, you don't have enough cash for that")
+        }
+        break;
+      
+      // player leaves with out buying anything
+      case 'Leave':
+      case 'leave':
+      case 'LEAVE':
+        window.alert('You leave the shop. Best of luck!') 
+        break;
+
+      default:
+        window.alert("You did not pick a valid option")
+        break;
+  }
+};
+// * end shop function
 
 
 startGame()
