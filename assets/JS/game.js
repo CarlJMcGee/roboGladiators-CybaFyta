@@ -12,68 +12,77 @@
     var enemyHealth = 50;
     var enemyAttack = 12;
     
-    // * Start fight funtion
-    var fight = function(enemyName) {
-        while (playerHealth > 0 && enemyHealth > 0) {
-          // ask player if they'd like to fight or run
-          var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
-      
-          // if player picks "skip" confirm and then stop the loop
-          if (promptFight === "skip" || promptFight === "SKIP") {
-            // confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit? That'll cost you 1000¥/" + playerYen + "¥.");
-      
-            // if yes (true), leave fight
-            if (confirmSkip) {
-              // subtract money from playerYen for skipping
-              playerYen = playerYen - 1000;
-              window.alert(playerName + ' has decided to skip this fight. You have ' + playerYen + '¥ left.');
-              console.log("playerYen", playerYen)
-              break;
-            }
-          }
-          else if (promptFight === 'fight' || promptFight === 'FIGHT' || promptFight === 'Fight') {
-          // remove enemy's health by subtracting the amount set in the playerAttack variable
-          enemyHealth = enemyHealth - playerAttack;
-          console.log(
-            playerName + ' attacked ' + enemyName + '. ' + enemyName + ' now has ' + enemyHealth + ' health remaining.'
-          );
-      
-          // check enemy's health
-          if (enemyHealth <= 0) {
-            // award player money for winning
-            playerYen = playerYen + 500;
-            window.alert(enemyName + ' has died! 💀. You won 500¥!');
-            // leave while() loop since enemy is dead
-            break;
-          } else {
-            window.alert(enemyName + ' still has ' + enemyHealth + ' health left.');
-          }
-      
-          // remove players's health by subtracting the amount set in the enemyAttack variable
-          playerHealth = playerHealth - enemyAttack;
-          console.log(
-            enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.'
-          );
-      
-          // check player's health
-          if (playerHealth <= 0) {
-            window.alert(playerName + ' has died! 💀');
-            // leave while() loop if player is dead
-            break;
-          } else {
-            window.alert(playerName + ' still has ' + playerHealth + ' health left.');
-          }
-        }
-        else if (promptFight === '/quit') {
-          console.log('forced quit');
+// function to produce random numbers
+var randomNumber = function(min, max) {
+  var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+  return value
+}
+  
+// * Start fight funtion
+var fight = function(enemyName) {
+    while (playerHealth > 0 && enemyHealth > 0) {
+      // ask player if they'd like to fight or run
+      var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+  
+      // if player picks "skip" confirm and then stop the loop
+      if (promptFight === "skip" || promptFight === "SKIP") {
+        // confirm player wants to skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit? That'll cost you 1000¥/" + playerYen + "¥.");
+  
+        // if yes (true), leave fight
+        if (confirmSkip) {
+          // subtract money from playerYen for skipping
+          playerYen = Math.max(0, playerYen - 1000);
+          window.alert(playerName + ' has decided to skip this fight. You have ' + playerYen + '¥ left.');
+          console.log("playerYen", playerYen)
           break;
         }
-        else {
-          window.alert('Please enter either FIGHT or SKIP')
-        }
-        } // end of while loop
-    }; //* end of fight function    
+      }
+      else if (promptFight === 'fight' || promptFight === 'FIGHT' || promptFight === 'Fight') {
+      // remove enemy's health by subtracting the amount set in the playerAttack variable
+      var damage = randomNumber(playerAttack - 3, playerAttack);
+      enemyHealth = Math.max(0, enemyHealth - damage);
+      console.log(
+        playerName + ' attacked ' + enemyName + '. ' + enemyName + ' now has ' + enemyHealth + ' health remaining.'
+      );
+  
+      // check enemy's health
+      if (enemyHealth <= 0) {
+        // award player money for winning
+        playerYen = playerYen + 500;
+        window.alert(enemyName + ' has died! 💀. You won 500¥!');
+        // leave while() loop since enemy is dead
+        break;
+      } else {
+        window.alert(enemyName + ' still has ' + enemyHealth + ' health left.');
+      }
+  
+      // remove players's health by subtracting the amount set in the enemyAttack variable
+      var damage = randomNumber(enemyAttack - 3, enemyAttack);
+      playerHealth = Math.max(0, playerHealth - damage);
+      console.log(
+        enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.'
+      );
+  
+      // check player's health
+      if (playerHealth <= 0) {
+        window.alert(playerName + ' has died! 💀');
+        // leave while() loop if player is dead
+        break;
+      } else {
+        window.alert(playerName + ' still has ' + playerHealth + ' health left.');
+      }
+    }
+    else if (promptFight === '/quit') {
+      console.log('forced quit');
+      break;
+    }
+    else {
+      window.alert('Please enter either FIGHT or SKIP')
+    }
+    } // end of while loop
+}; //* end of fight function    
 
 
 // *funtion to start  game
@@ -90,7 +99,7 @@ var startGame = function() {
           //queue next fighter from enemy Names array
           var pickedEnemyName = enemyNames[i];
           // reset enemy health
-          enemyHealth = 50;
+          enemyHealth = randomNumber(40, 60);
           // call fight function with enemy robots
           fight(enemyNames[i]);
           // if defeated enymy is not last, then open shop
