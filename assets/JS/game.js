@@ -1,16 +1,37 @@
 // Player
-    var playerName = "default";
-    var playerHealth = 100;
-    if (playerHealth > 0) { //check if playerHealth is <= 0
-        console.log('Your contestant is good to go!');
-    }
-    var playerAttack = 10;
-    var playerYen = 2000;
+  var playerInfo = {
+    name: 'default',
+    health: 100,
+    attack: 10,
+    money: 2000,
+  };
+  if (playerInfo.health > 0) { //check if playerInfo.health is <= 0
+      console.log('Challenger is good to go!');
+  }
+    // var playerInfo.name = "default";
+    // var playerInfo.health = 100;
+    // }
+    // var playerInfo.attack = 10;
+    // var playerInfo.money = 2000;
     
     // enemy robot
-    var enemyNames = ["Roborto", "Robot Rich Evans", "CybaFyta"];
-    var enemyHealth = 50;
-    var enemyAttack = 12;
+    var enemyInfo = [
+      {
+        name: 'Roborto',
+        attack: 12
+      },
+      {
+        name: 'Robot Rich Evans',
+        attack: 13
+      },
+      {
+        name: 'CybaFyta',
+        attack: 14
+      }
+    ];
+      // var enemy.names = ["Roborto", "Robot Rich Evans", "CybaFyta"];
+      // var enemy.health = 50;
+      // var enemy.attack = 12;
     
 // function to produce random numbers
 var randomNumber = function(min, max) {
@@ -20,90 +41,90 @@ var randomNumber = function(min, max) {
 }
   
 // * Start fight funtion
-var fight = function(enemyName) {
-    while (playerHealth > 0 && enemyHealth > 0) {
+var fight = function(enemy) {
+    while (playerInfo.health > 0 && enemy.health > 0) {
       // ask player if they'd like to fight or run
       var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
   
       // if player picks "skip" confirm and then stop the loop
       if (promptFight === "skip" || promptFight === "SKIP") {
         // confirm player wants to skip
-        var confirmSkip = window.confirm("Are you sure you'd like to quit? That'll cost you 1000¥/" + playerYen + "¥.");
+        var confirmSkip = window.confirm("Are you sure you'd like to quit? That'll cost you 1000¥/" + playerInfo.money + "¥.");
   
         // if yes (true), leave fight
         if (confirmSkip) {
-          // subtract money from playerYen for skipping
-          playerYen = Math.max(0, playerYen - 1000);
-          window.alert(playerName + ' has decided to skip this fight. You have ' + playerYen + '¥ left.');
-          console.log("playerYen", playerYen)
+          // subtract money from playerInfo.money for skipping
+          playerInfo.money = Math.max(0, playerInfo.money - 1000);
+          window.alert(playerInfo.name + ' has decided to skip this fight. You have ' + playerInfo.money + '¥ left.');
+          console.log("playerInfo.money", playerInfo.money)
           break;
         }
       }
-      else if (promptFight === 'fight' || promptFight === 'FIGHT' || promptFight === 'Fight') {
-      // remove enemy's health by subtracting the amount set in the playerAttack variable
-      var damage = randomNumber(playerAttack - 3, playerAttack);
-      enemyHealth = Math.max(0, enemyHealth - damage);
+      // else if (promptFight === 'fight' || promptFight === 'FIGHT' || promptFight === 'Fight') {
+      // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
+      var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+      enemy.health = Math.max(0, enemy.health - damage);
       console.log(
-        playerName + ' attacked ' + enemyName + '. ' + enemyName + ' now has ' + enemyHealth + ' health remaining.'
+        playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
       );
   
       // check enemy's health
-      if (enemyHealth <= 0) {
+      if (enemy.health <= 0) {
         // award player money for winning
-        playerYen = playerYen + 500;
-        window.alert(enemyName + ' has died! 💀. You won 500¥!');
+        playerInfo.money = playerInfo.money + 500;
+        window.alert(enemy.name + ' has died! 💀. You won 500¥!');
         // leave while() loop since enemy is dead
         break;
       } else {
-        window.alert(enemyName + ' still has ' + enemyHealth + ' health left.');
+        window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
       }
   
-      // remove players's health by subtracting the amount set in the enemyAttack variable
-      var damage = randomNumber(enemyAttack - 3, enemyAttack);
-      playerHealth = Math.max(0, playerHealth - damage);
+      // remove players's health by subtracting the amount set in the enemy.attack variable
+      var damage = randomNumber(enemy.attack - 3, enemy.attack);
+      playerInfo.health = Math.max(0, playerInfo.health - damage);
       console.log(
-        enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.'
+        enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
       );
   
       // check player's health
-      if (playerHealth <= 0) {
-        window.alert(playerName + ' has died! 💀');
+      if (playerInfo.health <= 0) {
+        window.alert(playerInfo.name + ' has died! 💀');
         // leave while() loop if player is dead
         break;
       } else {
-        window.alert(playerName + ' still has ' + playerHealth + ' health left.');
+        window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
       }
     }
-    else if (promptFight === '/quit') {
-      console.log('forced quit');
-      break;
-    }
-    else {
-      window.alert('Please enter either FIGHT or SKIP')
-    }
+    // else if (promptFight === '/quit') {
+      // console.log('forced quit');
+      // break;
+    // }
+    // else {
+    //   window.alert('Please enter either FIGHT or SKIP')
+    // }
     } // end of while loop
-}; //* end of fight function    
+// }; //* end of fight function    
 
 
 // *funtion to start  game
 var startGame = function() {
   debugger;
   // reset player health
-  playerHealth = 100
-  playerAttack = 10
-  playerYen = 2000
-  playerName = window.prompt("Please enter your challenger's name")
-  for (var i = 0; i < enemyNames.length; i++) {
-      if (playerHealth > 0) {
+  playerInfo.health = 100
+  playerInfo.attack = 10
+  playerInfo.money = 2000
+  playerInfo.name = window.prompt("Please enter your challenger's name")
+  for (var i = 0; i < enemyInfo.length; i++) {
+      if (playerInfo.health > 0) {
           window.alert('Welcome to roboGladiators! Round ' + (i + 1));
           //queue next fighter from enemy Names array
-          var pickedEnemyName = enemyNames[i];
+          var pickedEnemyObj = enemyInfo[i];
           // reset enemy health
-          enemyHealth = randomNumber(40, 60);
+          pickedEnemyObj.health = randomNumber(40, 60);
           // call fight function with enemy robots
-          fight(enemyNames[i]);
+          fight(pickedEnemyObj[i]);
           // if defeated enymy is not last, then open shop
-          if (playerHealth > 0 && i < enemyNames.length - 1) {
+          if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
             // ask player if they'd like to shop
             var storeConfirm = window.confirm('Would you like to paruse the shop before the next round?')
             // if yes, then call shop function
@@ -112,7 +133,7 @@ var startGame = function() {
             }
           };
       }
-      else if(playerHealth <= 0) {
+      else if(playerInfo.health <= 0) {
           window.alert('You have lost your robot in battle: GAME OVER!');
           break;
       }
@@ -124,8 +145,8 @@ var startGame = function() {
 // *end game function
 var endGame = function() {
   // if challenger is still alive at the end, they win
-  if (playerHealth > 0) {
-    window.alert("We have a new world Chapion! Give it up for Champion " + playerName + "!");
+  if (playerInfo.health > 0) {
+    window.alert("We have a new world Chapion! Give it up for Champion " + playerInfo.name + "!");
   }
   else {
     window.alert("Your challenger has been destroyed: GAME OVER!")
@@ -146,20 +167,20 @@ var endGame = function() {
 
 // * start shop function
 var shop = function() {
-  var shopOptionPrompt = window.prompt('Would you like to: REFILL your health (500¥); UPGRADE your attack (1200¥); LEAVE the shop. You have ' + playerYen + '¥')
+  var shopOptionPrompt = window.prompt('Would you like to: REFILL your health (500¥); UPGRADE your attack (1200¥); LEAVE the shop. You have ' + playerInfo.money + '¥')
   switch (shopOptionPrompt) {
 
     // increasing player Health
     case 'Refill':
     case 'refill':
     case 'REFILL':
-      if (playerYen >= 500) {
+      if (playerInfo.money >= 500) {
       var refillConfirm = window.confirm("Do you want to refill your challenger's health by 20hp for 500¥?")
       switch (refillConfirm) {
         case true:
-          playerHealth = playerHealth + 20
-          playerYen = playerYen - 500
-          window.alert("Challenger health is now at " + playerHealth + "hp! You have " + playerYen + "¥ left.")
+          playerInfo.health = playerInfo.health + 20
+          playerInfo.money = playerInfo.money - 500
+          window.alert("Challenger health is now at " + playerInfo.health + "hp! You have " + playerInfo.money + "¥ left.")
           break;
       
         default:
@@ -177,13 +198,13 @@ var shop = function() {
       case 'Upgrade':
       case 'upgrade':
       case 'UPGRADE':
-        if (playerYen >= 1200) {
+        if (playerInfo.money >= 1200) {
           var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
           switch (upgradeConfirm) {
             case true:
-              playerAttack = playerAttack + 6
-              playerYen = playerYen - 1200
-              window.alert("Challenger attack now does " + playerAttack + "dmg! You have " + playerYen + "¥ left.")
+              playerInfo.attack = playerInfo.attack + 6
+              playerInfo.money = playerInfo.money - 1200
+              window.alert("Challenger attack now does " + playerInfo.attack + "dmg! You have " + playerInfo.money + "¥ left.")
               break;
           
             default:
