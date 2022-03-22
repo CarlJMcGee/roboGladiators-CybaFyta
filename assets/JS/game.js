@@ -76,10 +76,8 @@ var fight = function(enemy) {
 // *funtion to start  game
 var startGame = function() {
   debugger;
-  // reset player health
-  playerInfo.health = 100
-  playerInfo.attack = 10
-  playerInfo.money = 2000
+  // reset player stats
+  playerInfo.reset();
   playerInfo.name = window.prompt("Please enter your challenger's name")
   for (var i = 0; i < enemyInfo.length; i++) {
     if (playerInfo.health > 0) {
@@ -100,11 +98,7 @@ var startGame = function() {
         }
       };
     }
-      else if(playerInfo.health <= 0) {
-          window.alert('You have lost your robot in battle: GAME OVER!');
-          break;
-      }
-    }
+  }
     endGame()
   }; 
   // *end start game function
@@ -139,44 +133,42 @@ var startGame = function() {
     
     // increasing player Health
     case 'Refill':
-      case 'refill':
-        case 'REFILL':
-          if (playerInfo.money >= 500) {
-            var refillConfirm = window.confirm("Do you want to refill your challenger's health by 20hp for 500¥?")
-            switch (refillConfirm) {
-              case true:
-                playerInfo.health = playerInfo.health + 20
-          playerInfo.money = playerInfo.money - 500
-          window.alert("Challenger health is now at " + playerInfo.health + "hp! You have " + playerInfo.money + "¥ left.")
-          break;
-          
-          default:
-            shop()
+    case 'refill':
+    case 'REFILL':
+      if (playerInfo.money >= 500) {
+        var refillConfirm = window.confirm("Do you want to refill your challenger's health by 20hp for 500¥?")
+        switch (refillConfirm) {
+          case true:
+            playerInfo.refillHealth()
+            window.alert("Challenger health is now at " + playerInfo.health + "hp! You have " + playerInfo.money + "¥ left.")
             break;
-          }
-        }
-        // if player doesn't have enough yen
-        else {
-          window.alert("Sorry, you don't have enough cash for that.")
-        }
+      
+      default:
+        shop()
         break;
-        
+      }
+    }
+    // if player doesn't have enough yen
+    else {
+      window.alert("Sorry, you don't have enough cash for that.")
+    }
+    break;
+    
         // increasing player attack
         case 'Upgrade':
-          case 'upgrade':
-            case 'UPGRADE':
-              if (playerInfo.money >= 1200) {
-                var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
+        case 'upgrade':
+        case 'UPGRADE':
+          if (playerInfo.money >= 1200) {
+            var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
           switch (upgradeConfirm) {
             case true:
-              playerInfo.attack = playerInfo.attack + 6
-              playerInfo.money = playerInfo.money - 1200
+              playerInfo.upgradeAttack()
               window.alert("Challenger attack now does " + playerInfo.attack + "dmg! You have " + playerInfo.money + "¥ left.")
               break;
-              
-              default:
-                break;
-              }
+          
+          default:
+            break;
+          }
         }
         // if player doesn't have enough yen
         else {
@@ -186,15 +178,15 @@ var startGame = function() {
         
         // player leaves with out buying anything
         case 'Leave':
-          case 'leave':
-            case 'LEAVE':
-              window.alert('You leave the shop. Best of luck!') 
-              break;
+        case 'leave':
+        case 'LEAVE':
+          window.alert('You leave the shop. Best of luck!') 
+          break;
               
-              default:
-                window.alert("You did not pick a valid option")
-                break;
-              }
+          default:
+            window.alert("You did not pick a valid option")
+            break;
+            }
 };
 // * end shop function
 
@@ -204,6 +196,23 @@ var startGame = function() {
     health: 100,
     attack: 10,
     money: 2000,
+
+    // reset stats after each game
+    reset: function(){
+      this.health = 100;
+      this.money = 2000;
+      this.attack = 10;
+    },
+
+    // store items
+    refillHealth: function () {
+      this.health += 20;
+      this.money -= 500;
+    },
+    upgradeAttack: function() {
+      this.attack += 6;
+      this.money -= 1200;
+    },
   };
   if (playerInfo.health > 0) { //check if playerInfo.health is <= 0
       console.log('Challenger is good to go!');
