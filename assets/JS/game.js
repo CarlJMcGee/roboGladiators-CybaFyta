@@ -117,7 +117,6 @@ var startGame = function() {
       // reset enemy health
       pickedEnemyObj.health = randomNumber(40, 60);
       // call fight function with enemy robots
-      debugger;
       fight(pickedEnemyObj);
       // if defeated enymy is not last, then open shop
       if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
@@ -157,15 +156,15 @@ var startGame = function() {
       };
       // *end end game function
       
-      // * start shop function
-      var shop = function() {
+// * start shop function
+  var shop = function() {
+    debugger;
   var shopOptionPrompt = window.prompt('Would you like to: REFILL your health (500¥); UPGRADE your attack (1200¥); LEAVE the shop. You have ' + playerInfo.money + '¥')
+  shopOptionPrompt = shopOptionPrompt.toLowerCase();
   switch (shopOptionPrompt) {
-    
     // increasing player Health
-    case 'Refill':
+    case "1":
     case 'refill':
-    case 'REFILL':
       if (playerInfo.money >= 500) {
         var refillConfirm = window.confirm("Do you want to refill your challenger's health by 20hp for 500¥?")
         switch (refillConfirm) {
@@ -173,51 +172,52 @@ var startGame = function() {
             playerInfo.refillHealth()
             window.alert("Challenger health is now at " + playerInfo.health + "hp! You have " + playerInfo.money + "¥ left.")
             break;
+        
+        // player cancels refill
+        default:
+          shop()
+        }
+    }
+    // if player doesn't have enough yen
+      else {
+        window.alert("Sorry, you don't have enough cash for that.")
+        shop();
+      }
+    break;
+    
+    // increasing player attack
+    case "2":
+    case 'upgrade':
+      if (playerInfo.money >= 1200) {
+        var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
+      switch (upgradeConfirm) {
+        case true:
+          playerInfo.upgradeAttack()
+          window.alert("Challenger attack now does " + playerInfo.attack + "dmg! You have " + playerInfo.money + "¥ left.")
+          break;
       
+      // player cancels upgrade
       default:
-        shop()
-        break;
+        shop();
       }
     }
     // if player doesn't have enough yen
     else {
-      window.alert("Sorry, you don't have enough cash for that.")
+      window.alert("Sorry, you don't have enough cash for that")
+      shop();
     }
     break;
     
-        // increasing player attack
-        case 'Upgrade':
-        case 'upgrade':
-        case 'UPGRADE':
-          if (playerInfo.money >= 1200) {
-            var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
-          switch (upgradeConfirm) {
-            case true:
-              playerInfo.upgradeAttack()
-              window.alert("Challenger attack now does " + playerInfo.attack + "dmg! You have " + playerInfo.money + "¥ left.")
-              break;
+    // player leaves with out buying anything
+    case "3":
+    case 'leave':
+      window.alert('You leave the shop. Best of luck!') 
+      break;
           
-          default:
-            break;
-          }
-        }
-        // if player doesn't have enough yen
-        else {
-          window.alert("Sorry, you don't have enough cash for that")
-        }
-        break;
-        
-        // player leaves with out buying anything
-        case 'Leave':
-        case 'leave':
-        case 'LEAVE':
-          window.alert('You leave the shop. Best of luck!') 
-          break;
-              
-          default:
-            window.alert("You did not pick a valid option")
-            break;
-            }
+    default:
+      window.alert("You did not pick a valid option")
+      return shop();
+      }
 };
 // * end shop function
 
