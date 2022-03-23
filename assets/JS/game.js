@@ -5,7 +5,17 @@ var randomNumber = function(min, max) {
   return value
 }
 
+// name input function
+var getPlayerName = function() {
+  var name = "";
 
+  while (name === "" || name === null) {
+    name = prompt("Please enter your challenger's name")
+  }
+
+  console.log("Your Robot's name is " + name);
+  return name;
+}
 
 // * Start fight funtion
 var fight = function(enemy) {
@@ -78,7 +88,6 @@ var startGame = function() {
   debugger;
   // reset player stats
   playerInfo.reset();
-  playerInfo.name = window.prompt("Please enter your challenger's name")
   for (var i = 0; i < enemyInfo.length; i++) {
     if (playerInfo.health > 0) {
       window.alert('Welcome to roboGladiators! Round ' + (i + 1));
@@ -192,7 +201,7 @@ var startGame = function() {
 
 // Player
   var playerInfo = {
-    name: 'default',
+    name: getPlayerName(),
     health: 100,
     attack: 10,
     money: 2000,
