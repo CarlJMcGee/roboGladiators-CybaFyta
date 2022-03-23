@@ -5,80 +5,153 @@ var randomNumber = function(min, max) {
   return value
 }
 
+// name input function
+var getPlayerName = function() {
+  var name = "";
 
+  while (name === "" || name === null) {
+    name = prompt("Please enter your challenger's name")
+  }
 
-// * Start fight funtion
-var fight = function(enemy) {
-    while (playerInfo.health > 0 && enemy.health > 0) {
-      // ask player if they'd like to fight or run
-      var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
-  
-      // if player picks "skip" confirm and then stop the loop
-      if (promptFight === "skip" || promptFight === "SKIP") {
-        // confirm player wants to skip
-        var confirmSkip = window.confirm("Are you sure you'd like to quit? That'll cost you 1000¥/" + playerInfo.money + "¥.");
-        
-        // if yes (true), leave fight
-        if (confirmSkip) {
-          // subtract money from playerInfo.money for skipping
+  console.log("Your Robot's name is " + name);
+  return name;
+}
+
+// fight or skip prompt validator
+var fightOrSkip = function() {
+  var promptFight = window.prompt("Would you like to FIGHT or SKIP this round?")
+  while (promptFight === "" || promptFight === null) {
+    window.alert("Please provide a valid answer")
+    return fightOrSkip()
+  }
+
+  promptFight = promptFight.toLowerCase();
+
+  if (promptFight === "skip") {
+    var confirmSkip = window.confirm("Are you sure you'd like to quit? That'll cost you 1000¥/" + playerInfo.money + "¥.");
+    
+    if (confirmSkip) {
+      if (playerInfo.money >= 1000){
           playerInfo.money = Math.max(0, playerInfo.money - 1000);
           window.alert(playerInfo.name + ' has decided to skip this fight. You have ' + playerInfo.money + '¥ left.');
-          console.log("playerInfo.money", playerInfo.money)
-          break;
+          console.log("playerInfo.money: ", playerInfo.money)
+
+          var storeConfirm = window.confirm("Would you like to paruse the shop before the next round?")
+          switch (storeConfirm) {
+            case true:
+              shop();
+              break;
+          
+            default:
+              break;
+          }
         }
-      }
-      else if (promptFight === 'fight' || promptFight === 'FIGHT' || promptFight === 'Fight') {
-        // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
+        else {
+          window.alert("You do not have enough Yen to Skip this fight.");
+          return fightOrSkip();
+        }
+    } 
+  }
+
+  if (promptFight === 'fight') {
+    var fightConfirmed = true;
+    return fightConfirmed;
+  }
+
+  else {
+    return fightOrSkip();
+  }
+}
+// * Start fight funtion
+var fight = function(enemy) {
+  debugger;
+  // turn keeper
+  var isPlayerTurn = true;
+  if (Math.random() > 0.5) {
+    isPlayerTurn = false;
+  }
+
+  while (playerInfo.health > 0 && enemy.health > 0) {
+    fightOrSkip();
+
+    if (fightOrSkip) {
+      if (isPlayerTurn) { // player turn first
+        // remove enemy health
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
         enemy.health = Math.max(0, enemy.health - damage);
-      console.log(
-        playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
-      );
-      
-      // check enemy's health
-      if (enemy.health <= 0) {
-        // award player money for winning
-        playerInfo.money = playerInfo.money + 500;
-        window.alert(enemy.name + ' has died! 💀. You won 500¥!');
-        // leave while() loop since enemy is dead
-        break;
-      } else {
-        window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
-      }
-      
-      // remove players's health by subtracting the amount set in the enemy.attack variable
-      var damage = randomNumber(enemy.attack - 3, enemy.attack);
-      playerInfo.health = Math.max(0, playerInfo.health - damage);
-      console.log(
-        enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
-      );
-      
-      // check player's health
-      if (playerInfo.health <= 0) {
-        window.alert(playerInfo.name + ' has died! 💀');
-        // leave while() loop if player is dead
-        break;
-      } else {
-        window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
-      }
-    }
-    else if (promptFight === '/quit') {
-      console.log('forced quit');
-      break;
-    }
-    else {
-      window.alert('Please enter either FIGHT or SKIP')
-    }
+        console.log(
+          playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
+        );
+        // check enemy's health
+        if (enemy.health <= 0) {
+          // award player money for winning
+          playerInfo.money = playerInfo.money + 500;
+          window.alert(enemy.name + ' has died! 💀. You won 500¥!');
+          // leave while() loop since enemy is dead
+          break;
+        } else {
+          window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
+        }
+        
+        // remove players's health
+        var damage = randomNumber(enemy.attack - 3, enemy.attack);
+        playerInfo.health = Math.max(0, playerInfo.health - damage);
+        console.log(
+          enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
+          );
+          // check player's health
+          if (playerInfo.health <= 0) {
+            window.alert(playerInfo.name + ' has died! 💀');
+            // leave while() loop if player is dead
+            break;
+          } else {
+            window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
+          }
+        }
+        
+        else if (isPlayerTurn === false) { //enemy turn first
+          // remove players's health by subtracting the amount set in the enemy.attack variable
+          var damage = randomNumber(enemy.attack - 3, enemy.attack);
+          playerInfo.health = Math.max(0, playerInfo.health - damage);
+          console.log(
+            enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
+            );
+            // check player's health
+            if (playerInfo.health <= 0) {
+              window.alert(playerInfo.name + ' has died! 💀');
+              // leave while() loop if player is dead
+              break;
+            } else {
+              window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
+            }
+            
+            // remove enemy health
+            var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+            enemy.health = Math.max(0, enemy.health - damage);
+            console.log(
+              playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
+            );
+            // check enemy's health
+            if (enemy.health <= 0) {
+              // award player money for winning
+              playerInfo.money = playerInfo.money + 500;
+              window.alert(enemy.name + ' has died! 💀. You won 500¥!');
+              // leave while() loop since enemy is dead
+              break;
+            } else {
+              window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
+            }
+          }
+        }
+        isPlayerTurn = !isPlayerTurn; // switch turns
   } // end of while loop
 }; //* end of fight function    
 
 
 // *funtion to start  game
 var startGame = function() {
-  debugger;
   // reset player stats
   playerInfo.reset();
-  playerInfo.name = window.prompt("Please enter your challenger's name")
   for (var i = 0; i < enemyInfo.length; i++) {
     if (playerInfo.health > 0) {
       window.alert('Welcome to roboGladiators! Round ' + (i + 1));
@@ -126,15 +199,14 @@ var startGame = function() {
       };
       // *end end game function
       
-      // * start shop function
-      var shop = function() {
+// * start shop function
+  var shop = function() {
   var shopOptionPrompt = window.prompt('Would you like to: REFILL your health (500¥); UPGRADE your attack (1200¥); LEAVE the shop. You have ' + playerInfo.money + '¥')
+  shopOptionPrompt = shopOptionPrompt.toLowerCase();
   switch (shopOptionPrompt) {
-    
     // increasing player Health
-    case 'Refill':
+    case "1":
     case 'refill':
-    case 'REFILL':
       if (playerInfo.money >= 500) {
         var refillConfirm = window.confirm("Do you want to refill your challenger's health by 20hp for 500¥?")
         switch (refillConfirm) {
@@ -142,57 +214,58 @@ var startGame = function() {
             playerInfo.refillHealth()
             window.alert("Challenger health is now at " + playerInfo.health + "hp! You have " + playerInfo.money + "¥ left.")
             break;
+        
+        // player cancels refill
+        default:
+          shop()
+        }
+    }
+    // if player doesn't have enough yen
+      else {
+        window.alert("Sorry, you don't have enough cash for that.")
+        shop();
+      }
+    break;
+    
+    // increasing player attack
+    case "2":
+    case 'upgrade':
+      if (playerInfo.money >= 1200) {
+        var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
+      switch (upgradeConfirm) {
+        case true:
+          playerInfo.upgradeAttack()
+          window.alert("Challenger attack now does " + playerInfo.attack + "dmg! You have " + playerInfo.money + "¥ left.")
+          break;
       
+      // player cancels upgrade
       default:
-        shop()
-        break;
+        shop();
       }
     }
     // if player doesn't have enough yen
     else {
-      window.alert("Sorry, you don't have enough cash for that.")
+      window.alert("Sorry, you don't have enough cash for that")
+      shop();
     }
     break;
     
-        // increasing player attack
-        case 'Upgrade':
-        case 'upgrade':
-        case 'UPGRADE':
-          if (playerInfo.money >= 1200) {
-            var upgradeConfirm = window.confirm("Do you want to increase your challenger's attack by 6dmg for 1200¥?")
-          switch (upgradeConfirm) {
-            case true:
-              playerInfo.upgradeAttack()
-              window.alert("Challenger attack now does " + playerInfo.attack + "dmg! You have " + playerInfo.money + "¥ left.")
-              break;
+    // player leaves with out buying anything
+    case "3":
+    case 'leave':
+      window.alert('You leave the shop. Best of luck!') 
+      break;
           
-          default:
-            break;
-          }
-        }
-        // if player doesn't have enough yen
-        else {
-          window.alert("Sorry, you don't have enough cash for that")
-        }
-        break;
-        
-        // player leaves with out buying anything
-        case 'Leave':
-        case 'leave':
-        case 'LEAVE':
-          window.alert('You leave the shop. Best of luck!') 
-          break;
-              
-          default:
-            window.alert("You did not pick a valid option")
-            break;
-            }
+    default:
+      window.alert("You did not pick a valid option")
+      return shop();
+      }
 };
 // * end shop function
 
 // Player
   var playerInfo = {
-    name: 'default',
+    name: getPlayerName(),
     health: 100,
     attack: 10,
     money: 2000,
