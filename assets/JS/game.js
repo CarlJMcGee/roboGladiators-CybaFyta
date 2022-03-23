@@ -17,6 +17,26 @@ var getPlayerName = function() {
   return name;
 }
 
+// fight or skip prompt validator
+var fightOrSkip = function() {
+  var promptFight = window.prompt("Would you like to FIGHT or SKIP this round?")
+  while (promptFight === "" || promptFight === null) {
+    window.alert("Please provide a valid answer")
+    return fightOrSkip()
+  }
+
+  if (promptFight === "skip" || promptFight === "Skip" || promptFight === "SKIP") {
+    var confirmSkip = window.confirm("Are you sure you'd like to quit? That'll cost you 1000¥/" + playerInfo.money + "¥.");
+    
+    if (confirmSkip) {
+      playerInfo.money = Math.max(0, playerInfo.money - 1000);
+      window.alert(playerInfo.name + ' has decided to skip this fight. You have ' + playerInfo.money + '¥ left.');
+      console.log("playerInfo.money: ", playerInfo.money)
+      shop();
+    } 
+  }
+}
+
 // * Start fight funtion
 var fight = function(enemy) {
     while (playerInfo.health > 0 && enemy.health > 0) {
@@ -38,6 +58,7 @@ var fight = function(enemy) {
         }
       }
       else if (promptFight === 'fight' || promptFight === 'FIGHT' || promptFight === 'Fight') {
+        
         // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
         enemy.health = Math.max(0, enemy.health - damage);
