@@ -64,16 +64,24 @@ var fightOrSkip = function() {
 }
 // * Start fight funtion
 var fight = function(enemy) {
-    while (playerInfo.health > 0 && enemy.health > 0) {
-      fightOrSkip();
+  debugger;
+  // turn keeper
+  var isPlayerTurn = true;
+  if (Math.random() > 0.5) {
+    isPlayerTurn = false;
+  }
 
-      if (fightOrSkip) {
+  while (playerInfo.health > 0 && enemy.health > 0) {
+    fightOrSkip();
+
+    if (fightOrSkip) {
+      if (isPlayerTurn) { // player turn first
+        // remove enemy health
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
         enemy.health = Math.max(0, enemy.health - damage);
         console.log(
           playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
         );
-        
         // check enemy's health
         if (enemy.health <= 0) {
           // award player money for winning
@@ -85,22 +93,57 @@ var fight = function(enemy) {
           window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
         }
         
-        // remove players's health by subtracting the amount set in the enemy.attack variable
+        // remove players's health
         var damage = randomNumber(enemy.attack - 3, enemy.attack);
         playerInfo.health = Math.max(0, playerInfo.health - damage);
         console.log(
           enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
-        );
-        
-        // check player's health
-        if (playerInfo.health <= 0) {
-          window.alert(playerInfo.name + ' has died! 💀');
-          // leave while() loop if player is dead
-          break;
-        } else {
-          window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
+          );
+          // check player's health
+          if (playerInfo.health <= 0) {
+            window.alert(playerInfo.name + ' has died! 💀');
+            // leave while() loop if player is dead
+            break;
+          } else {
+            window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
+          }
         }
-      }
+        
+        else if (isPlayerTurn === false) { //enemy turn first
+          // remove players's health by subtracting the amount set in the enemy.attack variable
+          var damage = randomNumber(enemy.attack - 3, enemy.attack);
+          playerInfo.health = Math.max(0, playerInfo.health - damage);
+          console.log(
+            enemy.name + ' attacked ' + playerInfo.name + '. ' + playerInfo.name + ' now has ' + playerInfo.health + ' health remaining.'
+            );
+            // check player's health
+            if (playerInfo.health <= 0) {
+              window.alert(playerInfo.name + ' has died! 💀');
+              // leave while() loop if player is dead
+              break;
+            } else {
+              window.alert(playerInfo.name + ' still has ' + playerInfo.health + ' health left.');
+            }
+            
+            // remove enemy health
+            var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+            enemy.health = Math.max(0, enemy.health - damage);
+            console.log(
+              playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
+            );
+            // check enemy's health
+            if (enemy.health <= 0) {
+              // award player money for winning
+              playerInfo.money = playerInfo.money + 500;
+              window.alert(enemy.name + ' has died! 💀. You won 500¥!');
+              // leave while() loop since enemy is dead
+              break;
+            } else {
+              window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
+            }
+          }
+        }
+        isPlayerTurn = !isPlayerTurn; // switch turns
   } // end of while loop
 }; //* end of fight function    
 
@@ -158,7 +201,6 @@ var startGame = function() {
       
 // * start shop function
   var shop = function() {
-    debugger;
   var shopOptionPrompt = window.prompt('Would you like to: REFILL your health (500¥); UPGRADE your attack (1200¥); LEAVE the shop. You have ' + playerInfo.money + '¥')
   shopOptionPrompt = shopOptionPrompt.toLowerCase();
   switch (shopOptionPrompt) {
