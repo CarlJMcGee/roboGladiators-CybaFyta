@@ -64,7 +64,6 @@ var fightOrSkip = function() {
 }
 // * Start fight funtion
 var fight = function(enemy) {
-  debugger;
   // turn keeper
   var isPlayerTurn = true;
   if (Math.random() > 0.5) {
