@@ -181,9 +181,53 @@ var startGame = function() {
     // if challenger is still alive at the end, they win
     if (playerInfo.health > 0) {
       window.alert("We have a new world Chapion! Give it up for Champion " + playerInfo.name + "!");
+
+      // check highscore
+      var highscore = localStorage.getItem("highscore");
+      if(highscore === "" || highscore === null) {
+        highscore = 0;
+      }
+      var highscoreName = localStorage.getItem("name");
+      if(highscoreName === "" || highscoreName === null) {
+        highscoreName = "N/A"
+      }
+  
+      // compare highscore to playerInfo.money
+      if (playerInfo.money > highscore) { // player beats highscore
+        // save player name and score
+        localStorage.setItem("highscore", playerInfo.money);
+        localStorage.setItem("name", playerInfo.name);
+        // congradulate player
+        window.alert("Congradulations! You now have the Highscore of " + playerInfo.money + "!")
+      }
+      else { // player does not beat highscore
+        window.alert("Highscore: " + highscoreName + "- " + highscore + ".")
+      }
     }
     else {
       window.alert("Your challenger has been destroyed: GAME OVER!")
+      
+      // check highscore
+      var highscore = localStorage.getItem("highscore");
+      if(highscore === "" || highscore === null) {
+        highscore = 0;
+      }
+      var highscoreName = localStorage.getItem("name");
+      if(highscoreName === "" || highscoreName === null) {
+        highscoreName = "N/A"
+      }
+  
+      // compare highscore to playerInfo.money
+      if (playerInfo.money > highscore) { // player beats highscore
+        // save player name and score
+        localStorage.setItem("highscore", playerInfo.money);
+        localStorage.setItem("name", playerInfo.name);
+        // congradulate player
+        window.alert("Congradulations! You now have the Highscore of " + playerInfo.money + "!")
+      }
+      else { // player does not beat highscore
+        window.alert("Highscore: " + highscoreName + "- " + highscore + ".")
+      }
     }
     // play again confirm
     var playAgain = window.confirm("Would you like to play again?")
